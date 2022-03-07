@@ -15,7 +15,7 @@ The program accepts the following commands from the user:
 - "`how we doin'?`"
 - "`fill 'er up`"
 - "`park`"
-- "`go to Bluestone Lane`"
+- "`go to Xi'an Famous Foods`"
 - "`help`"
 
 See below for details.
@@ -46,6 +46,8 @@ The Moped has a special "`go to Xi'an Famous Foods`" command that automatically 
 - the Moped should auto-drive itself one block at a time to the address of Xi'an Famous Foods, outputting its location with each block.
 - the Moped must use the same methods to move block-by-block and same amount of gas when homing as when being manually driven. If it needs to fill up gas while homing, it should do so automatically and then continue. The only difference between homing and manual driving is that the user is not being asked what the Moped should do, the Moped is deciding for itself.
 
+Any driving, including driving while "homing", should consume gas, and potentially lead to running out of gas while _en route_.
+
 ### Location-based advertising
 
 Our Moped is paid for by advertising, and should output ads when it reaches the locations of our current clients:
@@ -57,7 +59,7 @@ Our Moped is paid for by advertising, and should output ads when it reaches the 
 
 ### Help
 
-If the user enters the command, "help", the program should display a list of commands that the program understands.
+If the user enters the command, "`help`", the program should display a list of commands that the program understands.
 
 ### Assumptions
 
@@ -103,11 +105,14 @@ Now at 12th St. and 4th Ave, facing West.  Did you know The Strand has 18 Miles 
 The gas tank is currently 85% full.
 > go to Xi'an Famous Foods
 Now at 12th St. and 5th Ave, facing West.
-Now at 11th St. and 5th Ave, facing South.
-Now at 11th St. and 4th Ave, facing East.
-Now at 10th St. and 4th Ave, facing South.
-Now at 9th St. and 4th Ave, facing South.
-Now at 8th St. and 4th Ave, facing South.  We have reached the Bluestone Lane.  Enjoy your cappuccino.
+Now at 12th St. and 6th Ave, facing West.
+Now at 12th St. and 7th Ave, facing West.
+Now at 12th St. and 8th Ave, facing West.
+Now at 13th St. and 8th Ave, facing North.
+Now at 14th St. and 8th Ave, facing North.
+Now at 15th St. and 8th Ave, facing North.  We have reached Xi'an Famous Foods.  Enjoy your noodles.
+> how we doin'?
+The gas tank is currently 50% full.
 > go left
 ...etc...
 ```
