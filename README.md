@@ -26,7 +26,7 @@ The user simply instructs the Moped to "`go left`", "`go right`", "`straight on`
 
 - The Moped always starts out its life at 10th St. and 5th Ave., facing South.
 - The program must announce the Moped's current location and orientation (which cardinal direction it is facing), when it starts, and with every move.
-- If the user commands the Moped to "`park`", then the program outputs a message indicating the moped has been parked on the sidewalk, and quits.
+- If the user commands the Moped to "`park`", then the program outputs a message, "We have parked", indicating the moped has been parked on the sidewalk, and quits.
 - Turning left while going forwards is a different thing from turning left while in reverse, hence _your moped must keep track of its orientation_.
 
 ![Virtual moped movement](./images/Virtual_moped_movement_diagram.png)
@@ -36,7 +36,7 @@ The user simply instructs the Moped to "`go left`", "`go right`", "`straight on`
 - The moped's gas tank stores up to 1 gallon. It comes pre-filled.
 - Driving the moped burns 1/20th of gallon per city block.
 - If the user enters the command, "`how we doin'?`", the program outputs the current level of gasoline in the tank, as a percentage.
-- If the Moped runs out of gas, the user is notified that the Moped has run out of gas and no longer drives, and the program should quit.
+- If the Moped runs out of gas, the user is notified that the Moped has run out of gas ("We have run out of gas. Bye bye!") and no longer drives, and the program should quit.
 - To refill the gas tank, the user simply instructs the program to "`fill 'er up`".
 
 ### Homing
@@ -54,8 +54,8 @@ Our Moped is paid for by advertising, and should output ads when it reaches the 
 
 - at 79th St. and 8th Ave., the Moped should output an ad for the [American Museum of Natural History](http://www.amnh.org/).
 - at 74th St. and 1st Ave., the Moped should output an ad for [Memorial Sloan Kettering](http://www.mskcc.org/).
+- at 56th St. and 3rd Ave., the Moped should output an ad for [Tina's Cuban Cuisine](https://tinascubancuisine.com/) restaurant.
 - at 12th St. and 4th Ave., the Moped should output an ad for [The Strand](http://www.strandbooks.com/) book shop.
-- at 3rd St. and 6th Ave., the Moped should output an ad for [Fayda Coffee Tea Cookies Cake](http://www.fayda.com/) shop.
 
 ### Help
 
