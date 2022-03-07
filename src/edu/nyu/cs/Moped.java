@@ -2,7 +2,7 @@ package edu.nyu.cs;
 
 /**
  * A virtual moped, roaming the streets of New York.
- * The signatures of a few methods are given and must be completed and used as indicated. 
+ * The signatures of a few methods are given and must be completed and used as indicated.
  * None of these methods should print anything.
  * The rest is up to you.
  */
@@ -19,8 +19,12 @@ public class Moped {
     // start off at 10th st and 5th ave
     private int street = 10;
     private int ave = 5;
-    private Cardinality orientation = Cardinality.SOUTH;    
+    private Cardinality orientation = Cardinality.SOUTH;
     private int gas = 100;
+    private int MAX_STREET = 200;
+    private int MIN_STREET = 1;
+    private int MAX_AVE = 10;
+    private int MIN_AVE = 1;
 
     /**
      * Attaches the proper suffix to a number, such as 1st, 2nd, 3rd, 4th, etc.
@@ -44,6 +48,14 @@ public class Moped {
         else if (street==56 && ave==3) ad = "Tina's Cuban Cuisine";
         else if (street==12 && ave==4) ad = "The Strand";
         return ad;
+    }
+
+    private boolean inBounds(int[] location) {
+        int street = location[0];
+        int ave = location[1];
+        boolean streetInBounds = (street <= MAX_STREET && street >= MIN_STREET);
+        boolean aveInBounds = (ave <= MAX_AVE && ave >= MIN_AVE);
+        return streetInBounds && aveInBounds;
     }
 
     /**
@@ -78,7 +90,7 @@ public class Moped {
     /**
      * Prints the current location, by default exactly following the format:
      *      Now at 12th St. and 5th Ave, facing South.
-     * 
+     *
      * If the current location is associated with location-based advertising, this method should print exactly following format:
      *      Now at 12th St. and 4th Ave, facing West.  Did you know The Strand has 18 Miles of new, used and rare books, and has been in business since 1927?
      */
@@ -102,24 +114,38 @@ public class Moped {
      * This method must not print anything.
      */
     public void goLeft() {
+        // System.out.println(String.format("starting left turn from %sward %d:%d", this.orientation, this.street, this.ave));
         switch (this.orientation) {
             case NORTH:
+                int[] loc1 = {this.street, this.ave+1};
                 this.orientation = Cardinality.WEST;
-                this.ave++;
+                if (inBounds(loc1)) {
+                    this.ave++;
+                }
                 break;
             case SOUTH:
+                int[] loc2 = {this.street, this.ave-1};
                 this.orientation = Cardinality.EAST;
-                this.ave--;
+                if (inBounds(loc2)) {
+                    this.ave--;
+                }
                 break;
             case EAST:
+                int[] loc3 = {this.street+1, this.ave};
                 this.orientation = Cardinality.NORTH;
-                this.street++;
+                if (inBounds(loc3)) {
+                    this.street++;
+                }
                 break;
             case WEST:
+                int[] loc4 = {this.street-1, this.ave};
                 this.orientation = Cardinality.SOUTH;
-                this.street--;
+                if (inBounds(loc4)) {
+                    this.street--;
+                }
                 break;
         }
+        // System.out.println(String.format("ending left turn at %sward %d:%d", this.orientation, this.street, this.ave));
     }
 
     /**
@@ -131,20 +157,32 @@ public class Moped {
     public void goRight() {
         switch (this.orientation) {
             case NORTH:
+                int[] loc2 = {this.street, this.ave-1};
                 this.orientation = Cardinality.EAST;
-                this.ave--;
+                if (inBounds(loc2)) {
+                    this.ave--;
+                }
                 break;
             case SOUTH:
+                int[] loc1 = {this.street, this.ave+1};
                 this.orientation = Cardinality.WEST;
-                this.ave++;
+                if (inBounds(loc1)) {
+                    this.ave++;
+                }
                 break;
             case EAST:
-                this.orientation = Cardinality.NORTH;
-                this.street--;
+                int[] loc4 = {this.street-1, this.ave};
+                this.orientation = Cardinality.SOUTH;
+                if (inBounds(loc4)) {
+                    this.street--;
+                }
                 break;
             case WEST:
-                this.orientation = Cardinality.SOUTH;
-                this.street++;
+                int[] loc3 = {this.street+1, this.ave};
+                this.orientation = Cardinality.NORTH;
+                if (inBounds(loc3)) {
+                    this.street++;
+                }
                 break;
         }
     }
@@ -158,16 +196,28 @@ public class Moped {
     public void goStraight() {
         switch (this.orientation) {
             case NORTH:
-                this.street++;
+                int[] loc3 = {this.street+1, this.ave};
+                if (inBounds(loc3)) {
+                    this.street++;
+                }
                 break;
             case SOUTH:
-                this.street--;
+                int[] loc4 = {this.street-1, this.ave};
+                if (inBounds(loc4)) {
+                    this.street--;
+                }
                 break;
             case EAST:
-                this.ave--;
+                int[] loc2 = {this.street, this.ave-1};
+                if (inBounds(loc2)) {
+                    this.ave--;
+                }
                 break;
             case WEST:
-                this.ave++;
+                int[] loc1 = {this.street, this.ave+1};
+                if (inBounds(loc1)) {
+                    this.ave++;
+                }
                 break;
         }
     }
@@ -181,16 +231,28 @@ public class Moped {
     public void goBackwards() {
         switch (this.orientation) {
             case NORTH:
-                this.street--;
+                int[] loc4 = {this.street-1, this.ave};
+                if (inBounds(loc4)) {
+                    this.street--;
+                }
                 break;
             case SOUTH:
-                this.street++;
+                int[] loc3 = {this.street+1, this.ave};
+                if (inBounds(loc3)) {
+                    this.street++;
+                }
                 break;
             case EAST:
-                this.ave++;
+                int[] loc1 = {this.street, this.ave+1};
+                if (inBounds(loc1)) {
+                    this.ave++;
+                }
                 break;
             case WEST:
-                this.ave--;
+                int[] loc2 = {this.street, this.ave-1};
+                if (inBounds(loc2)) {
+                    this.ave--;
+                }
                 break;
         }
     }
@@ -208,7 +270,7 @@ public class Moped {
     /**
      * Prints the current gas level, by default exactly following the format:
      *      The gas tank is currently 85% full.
-     * 
+     *
      * If the moped is out of gas, this method should print exactly following format:
      *      We have run out of gas.  Bye bye!
      */
@@ -269,7 +331,7 @@ public class Moped {
     public int[] getLocation() {
         // int[] location = {10, 5}; // an example array at 10th st and 5th Ave.
         // return location;
-        int[] location = {this.street, this.ave}; 
+        int[] location = {this.street, this.ave};
         return location;
     }
 

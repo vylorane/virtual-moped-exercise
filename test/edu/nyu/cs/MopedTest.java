@@ -19,7 +19,14 @@ import java.util.Arrays;
 import org.junit.After;
 
 public class MopedTest {
+
     Moped m;
+    int[][] mockLocations = {
+        {10, 5},
+        {125, 10},
+        {2, 1},
+        {200, 2}
+    };
 
     @ClassRule
     public static final TextFromStandardInputStream systemInMock = emptyStandardInputStream();
@@ -68,84 +75,475 @@ public class MopedTest {
         }
     }
 
-    @Test
-    public void testTurnLeft() {
-        m.goLeft();        
+    /**
+     * Test any kind of movement
+     * @param mockOrientation The current moped orientation (i.e. "north", "south", "east", "west")
+     * @param movements A String array indicating a series of movements to perform (i.e. "straight", "backwards", "left", "right")
+     * @param mockLocations A two-dimensional array of coordinates from which to start.
+     * @param expectedLocations A two-dimensional array of coordinates where we expect the moped to end up.
+     */
+    public void testMovement(String mockOrientation, String[] mockMovementSequence, int[][] mockLocations, int[][] expectedLocations, String[] expectedOrientations) {
+        for (int i=0; i<mockLocations.length; i++) {
+            int[] mockLocation = mockLocations[i]; // set initial location
+            int[] expectedLocation = expectedLocations[i]; // where we expect moped to end up
+            String expectedOrientation = expectedOrientations[i]; // expected orientation at end
+            try {
+                m.setOrientation(mockOrientation); // set initial orientation
+                m.setLocation(mockLocation); // move moped to starting location
+            }
+            catch (Exception e) {
+                assertEquals(
+                    "Expected program not to crash when setting moped's location and orientation.", 
+                    String.format("Program crashed when setLocation or setOrientation were called location to put moped at %s facing %s: %s", Arrays.toString(mockLocation), mockOrientation, e)
+                );
+            }
+            // implement the movements
+            for (String mockMovementType : mockMovementSequence) {
+                try {
+                    switch (mockMovementType) {
+                        case "left":
+                            m.goLeft();
+                            break;
+                        case "right":
+                            m.goRight();
+                            break;
+                        case "straight":
+                            m.goStraight();
+                            break;
+                        case "backwards":
+                            m.goBackwards();
+                            break;
+                    }
+                }
+                catch (Exception e) {
+                    assertEquals(
+                        String.format("Expected program not to crash when trying to move %s.", mockMovementType),
+                        String.format("Program crashed when moving %s to %s: %s", mockMovementType, Arrays.toString(mockLocation), e)
+                    );
+                }
+            }
+
+            // test that the updated location matches expectations
+            try {
+                int[] actualLocation = m.getLocation();
+                String actualOrientation = m.getOrientation();
+                boolean isSameLocation = Arrays.equals(expectedLocation, actualLocation);
+                boolean isSameOrientation = expectedOrientation.equals(actualOrientation);
+                if (!isSameLocation && isSameOrientation) assertEquals(
+                    String.format("Expected a moped facing %s going %s from %s to end up at %s facing %s.", mockOrientation, Arrays.toString(mockMovementSequence), Arrays.toString(mockLocation), Arrays.toString(expectedLocation), expectedOrientation),
+                    String.format("In fact, the moped ended up at %s facing %s.", Arrays.toString(actualLocation), actualOrientation)
+                );
+                else {
+                    assert(true); // all good
+                }
+            }
+            catch (Exception e) {
+                assertEquals(
+                    "Expected program not to crash when getting location and orientation.",
+                    String.format("Program crashed when moving calling getLocation and/or getOrientation: ", e)
+                );
+            }
+        }
     }
 
     @Test
-    public void testTurnRight() {
-        m.goRight();        
+    public void testGoingStraight() {
+        testGoStraightFacingNorthward();
+        testGoStraightFacingSouthward();
+        testGoStraightFacingEastward();
+        testGoStraightFacingWestward();
     }
-
-    @Test
-    public void testGoStraightNorthward() {
+    
+    public void testGoStraightFacingNorthward() {
         String mockOrientation = "north";
-        int[][] mockLocations = {
-            {10, 5},
-            {125, 10},
-            {2, 1},
-            {200, 2}
-        };
         int[][] expectedLocations = {
             {11, 5},
             {126, 10},
             {3, 1},
             {200, 2}
         };
-        m.setOrientation(mockOrientation);
-        for (int i=0; i<mockLocations.length; i++) {
-            int[] mockLocation = mockLocations[i];
-            int[] expectedLocation = expectedLocations[i];
-            m.setLocation(mockLocation);
-            m.goStraight();
-            int[] actualLocation = m.getLocation();
-            boolean isSame = Arrays.equals(expectedLocation, actualLocation);
-            if (!isSame) assertEquals(
-                String.format("Expected moped to end up at %s when going straight facing %s from %s.", Arrays.toString(expectedLocation), mockOrientation, Arrays.toString(mockLocation)),
-                String.format("In fact, the moped ended up at %s.", Arrays.toString(actualLocation))
-            );
-            else {
-                assert(true);
-            }
-        }
+        String[] expectedOrientations = {
+            "north",
+            "north",
+            "north",
+            "north"
+        };
+        String[] mockMovements = {"straight"};
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
     }
 
-    @Test
-    public void testGoStraightSouthward() {
+    public void testGoStraightFacingSouthward() {
         String mockOrientation = "south";
-        int[][] mockLocations = {
-            {10, 5},
-            {125, 10},
-            {2, 1},
-            {1, 2}
-        };
+        String[] mockMovements = {"straight"};
         int[][] expectedLocations = {
             {9, 5},
             {124, 10},
             {1, 1},
-            {1, 2}
+            {199, 2}
         };
-        m.setOrientation(mockOrientation);
-        for (int i=0; i<mockLocations.length; i++) {
-            int[] mockLocation = mockLocations[i];
-            int[] expectedLocation = expectedLocations[i];
-            m.setLocation(mockLocation);
-            m.goStraight();
-            int[] actualLocation = m.getLocation();
-            boolean isSame = Arrays.equals(expectedLocation, actualLocation);
-            if (!isSame) assertEquals(
-                String.format("Expected moped to end up at %s when going straight facing %s from %s.", Arrays.toString(expectedLocation), mockOrientation, Arrays.toString(mockLocation)),
-                String.format("In fact, the moped ended up at %s.", Arrays.toString(actualLocation))
-            );
-            else {
-                assert(true);
-            }
-        }
+        String[] expectedOrientations = {
+            "south",
+            "south",
+            "south",
+            "south"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testGoStraightFacingEastward() {
+        String mockOrientation = "east";
+        String[] mockMovements = {"straight"};
+        int[][] expectedLocations = {
+            {10, 4},
+            {125, 9},
+            {2, 1},
+            {200, 1}
+        };
+        String[] expectedOrientations = {
+            "east",
+            "east",
+            "east",
+            "east"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+        
+    public void testGoStraightFacingWestward() {
+        String mockOrientation = "west";
+        String[] mockMovements = {"straight"};
+        int[][] expectedLocations = {
+            {10, 6},
+            {125, 10},
+            {2, 2},
+            {200, 3}
+        };
+        String[] expectedOrientations = {
+            "west",
+            "west",
+            "west",
+            "west"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+        
+    @Test
+    public void testGoingBackwards() {
+        testGoBackwardsFacingNorthward();
+        testGoBackwardsFacingSouthward();
+        testGoBackwardsFacingEastward();
+        testGoBackwardsFacingWestward();
+    }
+    
+    public void testGoBackwardsFacingNorthward() {
+        String mockOrientation = "north";
+        String[] mockMovements = {"backwards"};
+        int[][] expectedLocations = {
+            {9, 5},
+            {124, 10},
+            {1, 1},
+            {199, 2}
+        };
+        String[] expectedOrientations = {
+            "north",
+            "north",
+            "north",
+            "north"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testGoBackwardsFacingSouthward() {
+        String mockOrientation = "south";
+        String[] mockMovements = {"backwards"};
+        int[][] expectedLocations = {
+            {11, 5},
+            {126, 10},
+            {3, 1},
+            {200, 2}
+        };
+        String[] expectedOrientations = {
+            "south",
+            "south",
+            "south",
+            "south"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testGoBackwardsFacingEastward() {
+        String mockOrientation = "east";
+        String[] mockMovements = {"backwards"};
+        int[][] expectedLocations = {
+            {10, 6},
+            {125, 10},
+            {2, 2},
+            {200, 3}
+        };
+        String[] expectedOrientations = {
+            "east",
+            "east",
+            "east",
+            "east"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+        
+    public void testGoBackwardsFacingWestward() {
+        String mockOrientation = "west";
+        String[] mockMovements = {"backwards"};
+        int[][] expectedLocations = {
+            {10, 4},
+            {125, 9},
+            {2, 1},
+            {200, 1}
+        };
+        String[] expectedOrientations = {
+            "west",
+            "west",
+            "west",
+            "west"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
     }
 
     @Test
-    public void testBackUp() {
-        m.goBackwards();        
+    public void testTurningLeft() {
+        testGoLeftFacingNorthward();
+        testGoLeftFacingSouthward();
+        testGoLeftFacingEastward();
+        testGoLeftFacingWestward();
     }
+    
+    public void testGoLeftFacingNorthward() {
+        String mockOrientation = "north";
+        String[] mockMovements = {"left"};
+        int[][] expectedLocations = {
+            {10, 6},
+            {125, 10},
+            {2, 2},
+            {200, 3}
+        };
+        String[] expectedOrientations = {
+            "west",
+            "west",
+            "west",
+            "west"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testGoLeftFacingSouthward() {
+        String mockOrientation = "south";
+        String[] mockMovements = {"left"};
+        int[][] expectedLocations = {
+            {10, 4},
+            {125, 9},
+            {2, 1},
+            {200, 1}
+        };
+        String[] expectedOrientations = {
+            "east",
+            "east",
+            "east",
+            "east"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testGoLeftFacingEastward() {
+        String mockOrientation = "east";
+        String[] mockMovements = {"left"};
+        int[][] expectedLocations = {
+            {11, 5},
+            {126, 10},
+            {3, 1},
+            {200, 2}
+        };
+        String[] expectedOrientations = {
+            "north",
+            "north",
+            "north",
+            "north"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+        
+    public void testGoLeftFacingWestward() {
+        String mockOrientation = "west";
+        String[] mockMovements = {"left"};
+        int[][] expectedLocations = {
+            {9, 5},
+            {124, 10},
+            {1, 1},
+            {199, 2}
+        };
+        String[] expectedOrientations = {
+            "south",
+            "south",
+            "south",
+            "south"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    @Test
+    public void testTurningRight() {
+        testGoRightFacingNorthward();
+        testGoRightFacingSouthward();
+        testGoRightFacingEastward();
+        testGoRightFacingWestward();
+    }
+
+    public void testGoRightFacingNorthward() {
+        String mockOrientation = "north";
+        String[] mockMovements = {"right"};
+        int[][] expectedLocations = {
+            {10, 4},
+            {125, 9},
+            {2, 1},
+            {200, 1}
+        };
+        String[] expectedOrientations = {
+            "west",
+            "west",
+            "west",
+            "west"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testGoRightFacingSouthward() {
+        String mockOrientation = "south";
+        String[] mockMovements = {"right"};
+        int[][] expectedLocations = {
+            {10, 6},
+            {125, 10},
+            {2, 2},
+            {200, 3}
+        };
+        String[] expectedOrientations = {
+            "east",
+            "east",
+            "east",
+            "east"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testGoRightFacingEastward() {
+        String mockOrientation = "east";
+        String[] mockMovements = {"right"};
+        int[][] expectedLocations = {
+            {9, 5},
+            {124, 10},
+            {1, 1},
+            {199, 2}
+        };
+        String[] expectedOrientations = {
+            "north",
+            "north",
+            "north",
+            "north"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+        
+    public void testGoRightFacingWestward() {
+        String mockOrientation = "west";
+        String[] mockMovements = {"right"};
+        int[][] expectedLocations = {
+            {11, 5},
+            {126, 10},
+            {3, 1},
+            {200, 2}
+        };
+        String[] expectedOrientations = {
+            "south",
+            "south",
+            "south",
+            "south"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    @Test
+    public void testMultiStepMovements() {
+        testMultiStepMovementsNorthwards();
+        testMultiStepMovementsSouthwards();
+        testMultiStepMovementsEastwards();
+        testMultiStepMovementsWestwards();
+    }
+
+    public void testMultiStepMovementsNorthwards() {
+        String mockOrientation = "north";
+        String[] mockMovements = {"right", "left", "left", "right", "left"};
+        int[][] expectedLocations = {
+            {12, 6},    // {10, 5},
+            {127, 10},  // {125, 10},
+            {4, 3},     // {2, 1},
+            {200, 3}    // {200, 2}
+        };
+        String[] expectedOrientations = {
+            "west",
+            "west",
+            "west",
+            "west"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testMultiStepMovementsSouthwards() {
+        String mockOrientation = "south";
+        String[] mockMovements = {"right", "left", "left", "right", "left"};
+        int[][] expectedLocations = {
+            {8, 4},    // {10, 5},     
+            {123, 8},  // {125, 10},   
+            {1, 1},     // {2, 1},      
+            {198, 1}    // {200, 2}     
+        };
+        String[] expectedOrientations = {
+            "east",
+            "east",
+            "east",
+            "east"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testMultiStepMovementsEastwards() {
+        String mockOrientation = "east";
+        String[] mockMovements = {"right", "left", "left", "right", "left"};
+        int[][] expectedLocations = {
+            {11, 3},    // {10, 5},     
+            {126, 8},  // {125, 10},   
+            {3, 1},     // {2, 1},      
+            {200, 1}    // {200, 2}     
+        };
+        String[] expectedOrientations = {
+            "north",
+            "north",
+            "north",
+            "north"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    public void testMultiStepMovementsWestwards() {
+        String mockOrientation = "west";
+        String[] mockMovements = {"right", "left", "left", "right", "left"};
+        int[][] expectedLocations = {
+            {9, 7},    // {10, 5},     
+            {124, 10},  // {125, 10},   
+            {1, 3},     // {2, 1},      
+            {198, 4}    // {200, 2}     
+        };
+        String[] expectedOrientations = {
+            "south",
+            "south",
+            "south",
+            "south"
+        };
+        testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
 }

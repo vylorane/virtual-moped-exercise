@@ -68,7 +68,7 @@ Our program should follow a few key assumptions:
 Geography:
 
 - Assume that Manhattan is just a simple 200x10 grid of numbered city streets, thus ignoring real-world irregularities in geography and street names.
-- Users must not be allowed to drive their Moped off the grid... sorry :( . If a user tries to do so, you must not allow it and ask them for a valid move until one is given.
+- Users must not be allowed to drive their Moped off the grid... sorry :( . If a user tries to do so, the cardinal orientation of the moped should change, if it has been commanded to `go left` or `go right`, but its location should remain the same.
 
 Street naming:
 
