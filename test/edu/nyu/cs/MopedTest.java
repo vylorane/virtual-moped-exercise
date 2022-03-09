@@ -36,6 +36,7 @@ public class MopedTest {
 
     @Before
     public void init() {
+        // System.out.println("Before...");
         // any pre-test setup here
         try {
             m = new Moped();
@@ -51,6 +52,34 @@ public class MopedTest {
         m = null;
     }
     
+    public void implementMovement(Moped m, int[] mockLocation, String mockMovementType) {
+        System.out.println(String.format("Trying moped move %s from original point %s facing %s", mockMovementType, Arrays.toString(m.getLocation()), m.getOrientation()));
+        try {
+            switch (mockMovementType) {
+                case "left":
+                    m.goLeft();
+                    break;
+                case "right":
+                    m.goRight();
+                    break;
+                case "straight":
+                    m.goStraight();
+                    break;
+                case "backwards":
+                    m.goBackwards();
+                    break;
+                case "default":
+                    throw new Exception("No such movement type:" + mockMovementType);
+            }
+        }
+        catch (Exception e) {
+            assertEquals(
+                String.format("Expected program not to crash when trying to move %s.", mockMovementType),
+                String.format("Program crashed when moving %s to %s: %s", mockMovementType, Arrays.toString(mockLocation), e)
+            );
+        }
+    }
+
     @Test
     public void testInitialLocation() {
         int[] expectedLocation = {10, 5}; // 10th st and 5th ave
@@ -88,39 +117,19 @@ public class MopedTest {
             int[] expectedLocation = expectedLocations[i]; // where we expect moped to end up
             String expectedOrientation = expectedOrientations[i]; // expected orientation at end
             try {
+                m = new Moped(); // initialize a new moped
                 m.setOrientation(mockOrientation); // set initial orientation
                 m.setLocation(mockLocation); // move moped to starting location
             }
             catch (Exception e) {
                 assertEquals(
-                    "Expected program not to crash when setting moped's location and orientation.", 
-                    String.format("Program crashed when setLocation or setOrientation were called location to put moped at %s facing %s: %s", Arrays.toString(mockLocation), mockOrientation, e)
+                    "Expected program not to crash when instantiating a new moped and setting its location and orientation.", 
+                    String.format("Program crashed when instantiating or when setLocation or setOrientation were called location to put moped at %s facing %s: %s", Arrays.toString(mockLocation), mockOrientation, e)
                 );
             }
             // implement the movements
             for (String mockMovementType : mockMovementSequence) {
-                try {
-                    switch (mockMovementType) {
-                        case "left":
-                            m.goLeft();
-                            break;
-                        case "right":
-                            m.goRight();
-                            break;
-                        case "straight":
-                            m.goStraight();
-                            break;
-                        case "backwards":
-                            m.goBackwards();
-                            break;
-                    }
-                }
-                catch (Exception e) {
-                    assertEquals(
-                        String.format("Expected program not to crash when trying to move %s.", mockMovementType),
-                        String.format("Program crashed when moving %s to %s: %s", mockMovementType, Arrays.toString(mockLocation), e)
-                    );
-                }
+                implementMovement(m, mockLocation, mockMovementType); // do the movement
             }
 
             // test that the updated location matches expectations
@@ -544,6 +553,62 @@ public class MopedTest {
             "south"
         };
         testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+    }
+
+    @Test
+    public void testGasUsage() {
+        String[] mockOrientations = {
+            "north",
+            "south",
+            "east",
+            "west"
+        };
+        String[][] mockMovements = {
+            {"straight", "left"},                                          // {10, 5}, 
+            {"right", "left", "straight"},                                 // {125, 10}, 
+            {"left", "left", "left", "right", "straight"},                 // {2, 1}, 
+            {"straight", "back", "straight", "straight", "left", "right"}   // {200, 2} 
+        };
+        int[] expectedGasLevels = {
+            90,
+            90,
+            75,
+            75
+        };
+        for (int i=0; i<mockMovements.length; i++) {
+            int[] mockLocation = mockLocations[i];
+            String mockOrientation = mockOrientations[i];
+            String[] mockMovement = mockMovements[i];
+            int expectedGasLevel = expectedGasLevels[i];
+            try {
+                m = new Moped();
+                // System.out.println(String.format("setting location to %s", Arrays.toString(mockLocation)));
+                m.setLocation(mockLocation); // initial location
+                m.setOrientation(mockOrientation); // initial orientation
+                for (String movement : mockMovement) {
+                    implementMovement(m, mockLocation, movement); // do the movement
+                }
+                int actualGasLevel = m.getGasLevel();
+                boolean isSame = (expectedGasLevel == actualGasLevel);
+                if (!isSame) {
+                    assertEquals(
+                        String.format("Expected gas levels to be %d after starting a moped at %s facing %s, and then moving it %s.", expectedGasLevel, Arrays.toString(mockLocation), mockOrientation, Arrays.toString(mockMovement)),
+                        String.format("In fact, the moped ended up with gas level %d.", actualGasLevel)
+                    );
+                }
+                else {
+                    assert(true); // all good
+                }
+            m.printLocation();
+
+            }
+            catch (Exception e) {
+                assertEquals(
+                    "Expected program not to crash when instantiating a moped, moving it and checking gas levels.",
+                    String.format("Program crashed when instantiating an object, starting it facing %s at %s, moving %s and then checking gas levels: %s", mockOrientations, Arrays.toString(mockLocation), Arrays.toString(mockMovement), e)
+                );
+            }
+        }
     }
 
 }

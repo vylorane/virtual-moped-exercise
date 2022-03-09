@@ -1,5 +1,7 @@
 package edu.nyu.cs;
 
+import java.util.Arrays;
+
 /**
  * A virtual moped, roaming the streets of New York.
  * The signatures of a few methods are given and must be completed and used as indicated.
@@ -15,6 +17,8 @@ public class Moped {
         EAST,
         WEST
     }
+
+    public static final int GAS_USED_PER_BLOCK = 5;
 
     // start off at 10th st and 5th ave
     private int street = 10;
@@ -94,7 +98,7 @@ public class Moped {
      * If the current location is associated with location-based advertising, this method should print exactly following format:
      *      Now at 12th St. and 4th Ave, facing West.  Did you know The Strand has 18 Miles of new, used and rare books, and has been in business since 1927?
      */
-    public void printCurrentLocation() {
+    public void printLocation() {
         String street = getNumberWithSuffix(this.street);
         String ave = getNumberWithSuffix(this.ave);
         String orientation = getOrientation();
@@ -110,38 +114,49 @@ public class Moped {
     /**
      * Handles the command, `go left`.
      * Moves the moped one block to the left, and causes the moped to face the appropriate new cardinal direction.
-     * Consumes gas with each block, according to the instructions.
+     * Consumes gas with each block moved, and doesn't move or turn unless there is sufficient gas, as according to the instructions.
+     * If attempting to drive off the map, the moped will turn but not move a block.  Turns-only consume no gas.
      * This method must not print anything.
      */
     public void goLeft() {
+        // System.out.println(String.format("Going left with %d gas from %s:%s facing %s", this.getGasLevel(), this.street, this.ave, this.getOrientation()));
+        if (this.getGasLevel() < 10) return; // don't move without gas
         // System.out.println(String.format("starting left turn from %sward %d:%d", this.orientation, this.street, this.ave));
         switch (this.orientation) {
             case NORTH:
                 int[] loc1 = {this.street, this.ave+1};
+                // System.out.println("trying to go left from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc1));
                 this.orientation = Cardinality.WEST;
                 if (inBounds(loc1)) {
                     this.ave++;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case SOUTH:
                 int[] loc2 = {this.street, this.ave-1};
+                // System.out.println("trying to go left from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc2));
                 this.orientation = Cardinality.EAST;
                 if (inBounds(loc2)) {
                     this.ave--;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case EAST:
                 int[] loc3 = {this.street+1, this.ave};
+                // System.out.println("trying to go left from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc3));
                 this.orientation = Cardinality.NORTH;
                 if (inBounds(loc3)) {
                     this.street++;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case WEST:
                 int[] loc4 = {this.street-1, this.ave};
+                // System.out.println("trying to go left from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc4));
                 this.orientation = Cardinality.SOUTH;
                 if (inBounds(loc4)) {
                     this.street--;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
         }
@@ -151,37 +166,48 @@ public class Moped {
     /**
      * Handles the command, `go right`.
      * Moves the moped one block to the right, and causes the moped to face the appropriate new cardinal direction.
-     * Consumes gas with each block, according to the instructions.
+     * Consumes gas with each block moved, and doesn't move or turn unless there is sufficient gas, as according to the instructions.
+     * If attempting to drive off the map, the moped will turn but not move a block.  Turns-only consume no gas.
      * This method must not print anything.
      */
     public void goRight() {
+        // System.out.println(String.format("Going right with %d gas from %s:%s facing %s", this.getGasLevel(), this.street, this.ave, this.getOrientation()));
+        if (this.getGasLevel() < 10) return; // don't move without gas
         switch (this.orientation) {
             case NORTH:
-                int[] loc2 = {this.street, this.ave-1};
+                int[] loc1 = {this.street, this.ave-1};
+                // System.out.println("trying to go right from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc1));
                 this.orientation = Cardinality.EAST;
-                if (inBounds(loc2)) {
+                if (inBounds(loc1)) {
                     this.ave--;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case SOUTH:
-                int[] loc1 = {this.street, this.ave+1};
+                int[] loc2 = {this.street, this.ave+1};
+                // System.out.println("trying to go right from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc2));
                 this.orientation = Cardinality.WEST;
-                if (inBounds(loc1)) {
+                if (inBounds(loc2)) {
                     this.ave++;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case EAST:
-                int[] loc4 = {this.street-1, this.ave};
+                int[] loc3 = {this.street-1, this.ave};
+                // System.out.println("trying to go right from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc3));
                 this.orientation = Cardinality.SOUTH;
-                if (inBounds(loc4)) {
+                if (inBounds(loc3)) {
                     this.street--;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case WEST:
-                int[] loc3 = {this.street+1, this.ave};
+                int[] loc4 = {this.street+1, this.ave};
+                // System.out.println("trying to go right from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc4));
                 this.orientation = Cardinality.NORTH;
-                if (inBounds(loc3)) {
+                if (inBounds(loc4)) {
                     this.street++;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
         }
@@ -190,33 +216,39 @@ public class Moped {
     /**
      * Handles the command,`straight on`.
      * Moves the moped one block straight ahead.
-     * Consumes gas with each block, according to the instructions.
+     * Consumes gas with each block moved, and doesn't move unless there is sufficient gas, as according to the instructions.
      * This method must not print anything.
      */
     public void goStraight() {
+        // System.out.println(String.format("Going straight with %d gas from %s:%s facing %s", this.getGasLevel(), this.street, this.ave, this.getOrientation()));
+        if (this.getGasLevel() < 10) return; // don't move without gas
         switch (this.orientation) {
             case NORTH:
-                int[] loc3 = {this.street+1, this.ave};
-                if (inBounds(loc3)) {
+                int[] loc1 = {this.street+1, this.ave};
+                if (inBounds(loc1)) {
                     this.street++;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case SOUTH:
-                int[] loc4 = {this.street-1, this.ave};
-                if (inBounds(loc4)) {
+                int[] loc2 = {this.street-1, this.ave};
+                if (inBounds(loc2)) {
                     this.street--;
+                    this.gas -= GAS_USED_PER_BLOCK;                  
                 }
                 break;
             case EAST:
-                int[] loc2 = {this.street, this.ave-1};
-                if (inBounds(loc2)) {
+                int[] loc3 = {this.street, this.ave-1};
+                if (inBounds(loc3)) {
                     this.ave--;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case WEST:
-                int[] loc1 = {this.street, this.ave+1};
-                if (inBounds(loc1)) {
+                int[] loc4 = {this.street, this.ave+1};
+                if (inBounds(loc4)) {
                     this.ave++;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
         }
@@ -225,33 +257,43 @@ public class Moped {
     /**
      * Handles the command,`back up`.
      * Moves the moped one block backwards, but does not change the cardinal direction the moped is facing.
-     * Consumes gas with each block, according to the instructions.
+     * Consumes gas with each block moved, and doesn't move unless there is sufficient gas, as according to the instructions.
      * This method must not print anything.
      */
     public void goBackwards() {
+        // System.out.println(String.format("Going backwards with %d gas from %s:%s facing %s", this.getGasLevel(), this.street, this.ave, this.getOrientation()));
+        if (this.getGasLevel() < 10) return; // don't move without gas
         switch (this.orientation) {
             case NORTH:
                 int[] loc4 = {this.street-1, this.ave};
+                // System.out.println("trying to go backwards from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc4));
                 if (inBounds(loc4)) {
                     this.street--;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case SOUTH:
                 int[] loc3 = {this.street+1, this.ave};
+                // System.out.println("trying to go backwards from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc3));
                 if (inBounds(loc3)) {
                     this.street++;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case EAST:
                 int[] loc1 = {this.street, this.ave+1};
+                // System.out.println("trying to go backwards from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc1));
                 if (inBounds(loc1)) {
                     this.ave++;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
             case WEST:
                 int[] loc2 = {this.street, this.ave-1};
+                // System.out.println("trying to go backwards from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc2));
                 if (inBounds(loc2)) {
                     this.ave--;
+                    this.gas -= GAS_USED_PER_BLOCK;
                 }
                 break;
         }
@@ -302,7 +344,7 @@ public class Moped {
     /**
      * Handles the command, `go to Xi'an Famous Foods`
      * Causes the moped to self-drive, block-by-block, to 8th Ave. and 15th St.
-     * Consumes gas with each block, according to the instructions.
+     * Consumes gas with each block, and doesn't move unless there is sufficient gas, as according to the instructions.
      */
     public void goToXianFamousFoods() {
 
