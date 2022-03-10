@@ -13,7 +13,7 @@ The program accepts the following commands from the user:
 - "`straight on`"
 - "`back up`"
 - "`how we doin'?`"
-- "`fill 'er up`"
+- "`fill it up`"
 - "`park`"
 - "`go to Xi'an Famous Foods`"
 - "`help`"
@@ -37,7 +37,7 @@ The user simply instructs the Moped to "`go left`", "`go right`", "`straight on`
 - Driving the moped burns 1/20th of gallon per city block.
 - If the user enters the command, "`how we doin'?`", the program outputs the current level of gasoline in the tank, as a percentage.
 - If the Moped runs out of gas, the user is notified that the Moped has run out of gas ("We have run out of gas. Bye bye!") and no longer drives, and the program should quit.
-- To refill the gas tank, the user simply instructs the program to "`fill 'er up`".
+- To refill the gas tank, the user simply instructs the program to "`fill it up`".
 
 ### Homing
 
@@ -84,8 +84,8 @@ Street directions:
 
 Your assignment must adhere to the following requirements:
 
-- include a class named Moped that encapsulates all of the attributes and methods that our moped model needs in order to perform its functions.
-- include a class named TestDrive which includes a main() method that starts up the program and facilitates the interaction between the user and the Moped.
+- include a class named `Moped` that encapsulates all of the attributes and methods that our moped model needs in order to perform its functions.
+- include a class named `TestDrive` which includes a `main()` method that starts up the program and facilitates the interaction between the user and the Moped.
 - adhere to the object-oriented design principles of encapsulation and abstraction; make all data fields private; provide 'getter' and 'setter' methods as needed to control the behavior of your objects.
 
 ### Example session

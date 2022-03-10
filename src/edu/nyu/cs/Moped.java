@@ -48,7 +48,6 @@ public class Moped {
         String ad = "";
         if (street==79 && ave==8) ad = "American Museum of Natural History";
         else if (street==74 && ave==1) ad = "Memorial Sloan Kettering";
-        else if (street==74 && ave==1) ad = "Memorial Sloan Kettering";
         else if (street==56 && ave==3) ad = "Tina's Cuban Cuisine";
         else if (street==12 && ave==4) ad = "The Strand";
         return ad;
@@ -323,7 +322,7 @@ public class Moped {
     }
 
     /**
-     * Handles the command, `fill 'er up`.
+     * Handles the command, `fill it up`.
      * This method must not print anything.
      * Fills the gas level to the maximum.
      */
