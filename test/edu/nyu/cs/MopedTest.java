@@ -664,13 +664,13 @@ public class MopedTest {
             {"straight", "left"},                                          // {10, 5}, 
             {"right", "left", "straight"},                                 // {125, 10}, 
             {"left", "left", "left", "right", "straight"},                 // {2, 1}, 
-            {"straight", "back", "straight", "straight", "left", "right"}   // {200, 2} 
+            {"straight", "backwards", "straight", "straight", "left", "right"}   // {200, 2} 
         };
         int[] expectedGasLevels = {
             90,
             90,
             75,
-            75
+            70
         };
         for (int i=0; i<mockMovements.length; i++) {
             int[] mockLocation = mockLocations[i];
