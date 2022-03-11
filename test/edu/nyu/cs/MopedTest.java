@@ -68,7 +68,10 @@ public class MopedTest {
                 case "backwards":
                     m.goBackwards();
                     break;
-                case "default":
+                case "go to Xi'an Famous Foods":
+                    m.goToXianFamousFoods();
+                    break;
+                default:
                     throw new Exception("No such movement type:" + mockMovementType);
             }
         }
@@ -116,7 +119,9 @@ public class MopedTest {
         for (int i=0; i<mockLocations.length; i++) {
             int[] mockLocation = mockLocations[i]; // set initial location
             int[] expectedLocation = expectedLocations[i]; // where we expect moped to end up
-            String expectedOrientation = expectedOrientations[i]; // expected orientation at end
+            // not all tests have a specific expectation of orientation.. .leave blank if none
+            String expectedOrientation = "any orientation";  // will hold expected orientation at end, if any has been specified
+            if (expectedOrientations.length > 0) expectedOrientation = expectedOrientations[i];
             // System.out.printf("start location: %s; orientation: %s; moves: %s;\n", Arrays.toString(mockLocation), mockOrientation, Arrays.toString(mockMovementSequence));
 
             try {
@@ -140,7 +145,7 @@ public class MopedTest {
                 int[] actualLocation = m.getLocation();
                 String actualOrientation = m.getOrientation();
                 boolean isSameLocation = Arrays.equals(expectedLocation, actualLocation);
-                boolean isSameOrientation = expectedOrientation.equals(actualOrientation);
+                boolean isSameOrientation = expectedOrientation.equals(actualOrientation) || expectedOrientation.equals("any orientation"); // check for expected orientation, if specified.  If "any" allowed, ignore.
                 // System.out.printf("end location: %s; orientation: %s; expectedLocation: %s; expectedOrientation: %s\n", Arrays.toString(actualLocation), actualOrientation, Arrays.toString(expectedLocation), expectedOrientation);
                 if (!isSameLocation || !isSameOrientation) {
                     // failure
@@ -629,6 +634,24 @@ public class MopedTest {
         return o;
     }
 
+    @Test
+    public void testHoming() {
+        String mockOrientation = "north";
+        String[] mockMovements = {"go to Xi'an Famous Foods"};
+        int[][] expectedLocations = {
+            {15, 8},    // {10, 5},     
+            {15, 8},  // {125, 10},   
+            {15, 8},     // {2, 1},      
+            {15, 8}    // {200, 2}     
+        };
+        String[] expectedOrientations = {};
+        TestOutcome o = testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
+        // if failed, fail assertion
+        if (!o.passed) {
+            assertEquals(o.expected, o.actual);
+        }
+    }
+    
     @Test
     public void testGasUsage() {
         String[] mockOrientations = {
