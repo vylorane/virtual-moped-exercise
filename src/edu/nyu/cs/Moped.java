@@ -5,89 +5,27 @@ import java.util.Arrays;
 /**
  * A virtual moped, roaming the streets of New York.
  * The signatures of a few methods are given and must be completed and used as indicated.
- * None of these methods should print anything.
+ * Create as many additional properties or methods as you want, as long as the given methods behave as indicated in the instructions.
+ * Follow good object-oriented design, especially the principles of abstraction (i.e. the black box metaphor) and encapsulation (i.e. methods and properties belonging to specific objects), as we have learned them.
  * The rest is up to you.
  */
 public class Moped {
-
-    // a set of constant-like values representing each of the cardinal directions
-    public static enum Cardinality {
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST
-    }
-
-    public static final int GAS_USED_PER_BLOCK = 5;
-
-    // start off at 10th st and 5th ave
-    private int street = 10;
-    private int ave = 5;
-    private Cardinality orientation = Cardinality.SOUTH;
-    private int gas = 100;
-    private int MAX_STREET = 200;
-    private int MIN_STREET = 1;
-    private int MAX_AVE = 10;
-    private int MIN_AVE = 1;
-
-    /**
-     * Attaches the proper suffix to a number, such as 1st, 2nd, 3rd, 4th, etc.
-     * @param num The number to which to attach the suffix, as an int.
-     * @return The number with the appropriate suffix attached, as a String.
-     */
-    private String getNumberWithSuffix(int num) {
-        String withSuffix;
-        if ( ("" + num).endsWith("1")) withSuffix = num + "st";
-        else if ( ("" + num).endsWith("2")) withSuffix = num + "nd";
-        else if ( ("" + num).endsWith("3")) withSuffix = num + "rd";
-        else withSuffix = num + "th";
-        return withSuffix;
-    }
-
-    private String getAdvertisementFor(int street, int ave) {
-        String ad = "";
-        if (street==79 && ave==8) ad = "American Museum of Natural History";
-        else if (street==74 && ave==1) ad = "Memorial Sloan Kettering";
-        else if (street==56 && ave==3) ad = "Tina's Cuban Cuisine";
-        else if (street==12 && ave==4) ad = "The Strand";
-        return ad;
-    }
-
-    private boolean inBounds(int[] location) {
-        int street = location[0];
-        int ave = location[1];
-        boolean streetInBounds = (street <= MAX_STREET && street >= MIN_STREET);
-        boolean aveInBounds = (ave <= MAX_AVE && ave >= MIN_AVE);
-        return streetInBounds && aveInBounds;
-    }
 
     /**
      * Sets the orientation of the moped to a particular cardinal direction.
      * @param orientation A string representing which cardinal direction at which to set the orientation of the moped.  E.g. "north", "south", "east", or "west".
      */
     public void setOrientation(String orientation) {
-        switch (orientation) {
-            case "north":
-                this.orientation = Cardinality.NORTH;
-                break;
-            case "south":
-                this.orientation = Cardinality.SOUTH;
-                break;
-            case "east":
-                this.orientation = Cardinality.EAST;
-                break;
-            case "west":
-                this.orientation = Cardinality.WEST;
-                break;
-        }
+
     }
+
     /**
      * Returns the current orientation of the moped, as a lowercase String.
      * E.g. "north", "south", "east", or "west".
      * @return The current orientation of the moped, as a lowercase String.
      */
     public String getOrientation() {
-        return this.orientation.toString().toLowerCase();
+        return ""; // placeholder only... delete this!        
     }
 
     /**
@@ -96,18 +34,11 @@ public class Moped {
      *
      * If the current location is associated with location-based advertising, this method should print exactly following format:
      *      Now at 12th St. and 4th Ave, facing West.  Did you know The Strand has 18 Miles of new, used and rare books, and has been in business since 1927?
+     * 
+     * Note that the suffixes for the numbers must be correct: i.e. the "st" in "1st", "nd" in "2nd", "rd" in "3rd", "th" in "4th", etc, must be correct.
      */
     public void printLocation() {
-        String street = getNumberWithSuffix(this.street);
-        String ave = getNumberWithSuffix(this.ave);
-        String orientation = getOrientation();
-        String advertisement = getAdvertisementFor(this.street, this.ave);
-        if ( ("" + this.street).endsWith("1")) street = this.street + "st";
-        else if ( ("" + this.street).endsWith("2")) street = this.street + "nd";
-        else if ( ("" + this.street).endsWith("2")) street = this.street + "nd";
-        else if (this.street == 2) street = this.street + "nd";
-        String msg = String.format("Now at %s St. and %s Ave, facing %s.%s", street, ave, orientation, advertisement);
-        System.out.println(msg);
+
     }
 
     /**
@@ -118,48 +49,7 @@ public class Moped {
      * This method must not print anything.
      */
     public void goLeft() {
-        // System.out.println(String.format("Going left with %d gas from %s:%s facing %s", this.getGasLevel(), this.street, this.ave, this.getOrientation()));
-        if (this.getGasLevel() < 10) return; // don't move without gas
-        // System.out.println(String.format("starting left turn from %sward %d:%d", this.orientation, this.street, this.ave));
-        switch (this.orientation) {
-            case NORTH:
-                int[] loc1 = {this.street, this.ave+1};
-                // System.out.println("trying to go left from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc1));
-                this.orientation = Cardinality.WEST;
-                if (inBounds(loc1)) {
-                    this.ave++;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case SOUTH:
-                int[] loc2 = {this.street, this.ave-1};
-                // System.out.println("trying to go left from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc2));
-                this.orientation = Cardinality.EAST;
-                if (inBounds(loc2)) {
-                    this.ave--;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case EAST:
-                int[] loc3 = {this.street+1, this.ave};
-                // System.out.println("trying to go left from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc3));
-                this.orientation = Cardinality.NORTH;
-                if (inBounds(loc3)) {
-                    this.street++;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case WEST:
-                int[] loc4 = {this.street-1, this.ave};
-                // System.out.println("trying to go left from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc4));
-                this.orientation = Cardinality.SOUTH;
-                if (inBounds(loc4)) {
-                    this.street--;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-        }
-        // System.out.println(String.format("ending left turn at %sward %d:%d", this.orientation, this.street, this.ave));
+
     }
 
     /**
@@ -170,46 +60,7 @@ public class Moped {
      * This method must not print anything.
      */
     public void goRight() {
-        // System.out.println(String.format("Going right with %d gas from %s:%s facing %s", this.getGasLevel(), this.street, this.ave, this.getOrientation()));
-        if (this.getGasLevel() < 10) return; // don't move without gas
-        switch (this.orientation) {
-            case NORTH:
-                int[] loc1 = {this.street, this.ave-1};
-                // System.out.println("trying to go right from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc1));
-                this.orientation = Cardinality.EAST;
-                if (inBounds(loc1)) {
-                    this.ave--;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case SOUTH:
-                int[] loc2 = {this.street, this.ave+1};
-                // System.out.println("trying to go right from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc2));
-                this.orientation = Cardinality.WEST;
-                if (inBounds(loc2)) {
-                    this.ave++;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case EAST:
-                int[] loc3 = {this.street-1, this.ave};
-                // System.out.println("trying to go right from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc3));
-                this.orientation = Cardinality.SOUTH;
-                if (inBounds(loc3)) {
-                    this.street--;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case WEST:
-                int[] loc4 = {this.street+1, this.ave};
-                // System.out.println("trying to go right from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc4));
-                this.orientation = Cardinality.NORTH;
-                if (inBounds(loc4)) {
-                    this.street++;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-        }
+
     }
 
     /**
@@ -219,38 +70,7 @@ public class Moped {
      * This method must not print anything.
      */
     public void goStraight() {
-        // System.out.println(String.format("Going straight with %d gas from %s:%s facing %s", this.getGasLevel(), this.street, this.ave, this.getOrientation()));
-        if (this.getGasLevel() < 10) return; // don't move without gas
-        switch (this.orientation) {
-            case NORTH:
-                int[] loc1 = {this.street+1, this.ave};
-                if (inBounds(loc1)) {
-                    this.street++;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case SOUTH:
-                int[] loc2 = {this.street-1, this.ave};
-                if (inBounds(loc2)) {
-                    this.street--;
-                    this.gas -= GAS_USED_PER_BLOCK;                  
-                }
-                break;
-            case EAST:
-                int[] loc3 = {this.street, this.ave-1};
-                if (inBounds(loc3)) {
-                    this.ave--;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case WEST:
-                int[] loc4 = {this.street, this.ave+1};
-                if (inBounds(loc4)) {
-                    this.ave++;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-        }
+
     }
 
     /**
@@ -260,42 +80,7 @@ public class Moped {
      * This method must not print anything.
      */
     public void goBackwards() {
-        // System.out.println(String.format("Going backwards with %d gas from %s:%s facing %s", this.getGasLevel(), this.street, this.ave, this.getOrientation()));
-        if (this.getGasLevel() < 10) return; // don't move without gas
-        switch (this.orientation) {
-            case NORTH:
-                int[] loc4 = {this.street-1, this.ave};
-                // System.out.println("trying to go backwards from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc4));
-                if (inBounds(loc4)) {
-                    this.street--;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case SOUTH:
-                int[] loc3 = {this.street+1, this.ave};
-                // System.out.println("trying to go backwards from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc3));
-                if (inBounds(loc3)) {
-                    this.street++;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case EAST:
-                int[] loc1 = {this.street, this.ave+1};
-                // System.out.println("trying to go backwards from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc1));
-                if (inBounds(loc1)) {
-                    this.ave++;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-            case WEST:
-                int[] loc2 = {this.street, this.ave-1};
-                // System.out.println("trying to go backwards from " + this.street + ":" + this.ave + " facing " + this.getOrientation() + " to " + Arrays.toString(loc2));
-                if (inBounds(loc2)) {
-                    this.ave--;
-                    this.gas -= GAS_USED_PER_BLOCK;
-                }
-                break;
-        }
+
     }
 
     /**
@@ -304,8 +89,7 @@ public class Moped {
      * @return The current gas level, as an integer from 0 to 100.
      */
     public int getGasLevel() {
-        // return 100; // replace this with your own int, according to the instructions
-        return this.gas;
+        return 0; // placeholder only... delete this!
     }
 
     /**
@@ -316,9 +100,7 @@ public class Moped {
      *      We have run out of gas.  Bye bye!
      */
     public void printGasLevel() {
-        String msg = "The gas tank is currently " + this.gas + "% full.";
-        if (this.gas <= 0) msg = "We have run out of gas.  Bye bye!";
-        System.out.println(msg);
+
     }
 
     /**
@@ -327,17 +109,17 @@ public class Moped {
      * Fills the gas level to the maximum.
      */
     public void fillGas() {
-        this.gas = 100;
+
     }
 
     /**
      * Handles the command, `park`.
-     * This causes the program to quit.
+     * This causes the program to quit.  
+     * You can use System.exit(0); to cause a program to quit with status code 0, which indicates a normal graceful exit. 
+     * (In case you were wondering, status code 1 represents quitting as a result of an error of some kind).
      */
     public void park() {
-        System.out.println("We have parked.");
-        // quit the program
-        System.exit(0);
+
     }
 
     /**
@@ -354,7 +136,7 @@ public class Moped {
      * @return String containing commands that the user can type to control the moped.
      */
     public String getHelp() {
-        return "help!"; // replace this with your own String, according to the instructions
+        return ""; // placeholder only... delete this!        
     }
 
     /**
@@ -362,17 +144,16 @@ public class Moped {
      * @param location an int array containing the new location at which to place the moped, in the order {street, avenue}.
      */
     public void setLocation(int[] location) {
-        this.street = location[0];
-        this.ave = location[1];
+
     }
+
     /**
      * Gets the current location of the moped.
      * @return The current location of the moped, as an int array in the order {street, avenue}.
      */
     public int[] getLocation() {
-        // int[] location = {10, 5}; // an example array at 10th st and 5th Ave.
-        // return location;
-        int[] location = {this.street, this.ave};
+        // the following two lines are placeholder... delete them and return this moped's correct coordinates.
+        int[] location = {10, 5}; // an example array at 10th st and 5th Ave.... placeholder only... delete this!
         return location;
     }
 
