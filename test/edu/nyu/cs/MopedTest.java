@@ -90,7 +90,7 @@ public class MopedTest {
         if (!Arrays.equals(actualLocation, expectedLocation)) {
             assertEquals(
                 String.format("Expected the moped's initial location to be %s.", Arrays.toString(expectedLocation)), 
-                String.format("In fact, the initial location of your moped is %s", Arrays.toString(actualLocation))
+                String.format("In fact, the initial location of your moped is %s.  FYI, this is the value returned by the getLocation() method.", Arrays.toString(actualLocation))
             );
         }
     }
@@ -101,8 +101,8 @@ public class MopedTest {
         String actualOrientation = m.getOrientation().toLowerCase();
         if (!expectedOrientation.equals(actualOrientation)) {
             assertEquals(
-                String.format("Expected the moped's initial orientation to be %s.", expectedOrientation), 
-                String.format("In fact, the initial orientation of your moped is %s", actualOrientation)
+                String.format("Expected the moped's initial orientation to be '%s'.", expectedOrientation), 
+                String.format("In fact, the initial orientation of your moped is '%s'.  FYI, this is value is the value returned by the getOrientation() method.", actualOrientation)
             );
         }
     }
@@ -149,8 +149,8 @@ public class MopedTest {
                 // System.out.printf("end location: %s; orientation: %s; expectedLocation: %s; expectedOrientation: %s\n", Arrays.toString(actualLocation), actualOrientation, Arrays.toString(expectedLocation), expectedOrientation);
                 if (!isSameLocation || !isSameOrientation) {
                     // failure
-                    String expectedMsg = String.format("Expected a moped facing %s going %s from %s to end up at %s facing %s.", mockOrientation, Arrays.toString(mockMovementSequence), Arrays.toString(mockLocation), Arrays.toString(expectedLocation), expectedOrientation);
-                    String actualMsg = String.format("In fact, the moped ended up at '%s' facing '%s'.  FYI, these incorrect location and orientation values were returned by the moped's getLocation() and getOrientation() methods.", Arrays.toString(actualLocation), actualOrientation);
+                    String expectedMsg = String.format("Expected a moped facing '%s' going %s from %s to end up at %s facing '%s'.", mockOrientation, Arrays.toString(mockMovementSequence), Arrays.toString(mockLocation), Arrays.toString(expectedLocation), expectedOrientation);
+                    String actualMsg = String.format("In fact, the moped ended up at %s facing '%s'.  FYI, these incorrect location and/or orientation values were returned by the moped's getLocation() and getOrientation() methods, respectively.", Arrays.toString(actualLocation), actualOrientation);
                     o = new TestOutcome(false, expectedMsg, actualMsg);
                 }
                 else {
@@ -689,8 +689,8 @@ public class MopedTest {
                 boolean isSame = (expectedGasLevel == actualGasLevel);
                 if (!isSame) {
                     assertEquals(
-                        String.format("Expected gas levels to be %d after starting a moped at %s facing %s, and then moving it %s.", expectedGasLevel, Arrays.toString(mockLocation), mockOrientation, Arrays.toString(mockMovement)),
-                        String.format("In fact, the moped ended up with gas level %d.", actualGasLevel)
+                        String.format("Expected gas levels to be %d%% after starting a moped at %s facing '%s', and then moving it %s.", expectedGasLevel, Arrays.toString(mockLocation), mockOrientation, Arrays.toString(mockMovement)),
+                        String.format("In fact, the moped ended up with gas level %d%%.  FYI, this value was returned by the getGasLevel() method.", actualGasLevel)
                     );
                 }
                 else {
