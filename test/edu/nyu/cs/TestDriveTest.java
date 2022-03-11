@@ -8,8 +8,8 @@ public class TestDriveTest {
     @Test
     public void testMain() {
         assertEquals(
-            "We expect the main method in the TestDrive class to behave as per the instructions",
-            "We have not created automated tests for the main method, so make sure you follow the instructions!"
+            "We expect the main method in the TestDrive class to behave as per the instructions.",
+            "We have not created automated tests for the main method.  It is up to you to make sure your moped behaves as expected!"
         );
     }
 }
