@@ -153,7 +153,7 @@ public class Moped {
      */
     public int[] getLocation() {
         // the following two lines are placeholder... delete them and return this moped's correct coordinates.
-        int[] location = {10, 5}; // an example array at 10th st and 5th Ave.... placeholder only... delete this!
+        int[] location = {3, 4}; // an example array at 3rd st and 4th Ave.... placeholder only... delete this!
         return location;
     }
 
