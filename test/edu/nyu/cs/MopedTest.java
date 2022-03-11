@@ -470,10 +470,10 @@ public class MopedTest {
             {200, 1}
         };
         String[] expectedOrientations = {
-            "west",
-            "west",
-            "west",
-            "west"
+            "east",
+            "east",
+            "east",
+            "east"
         };
         TestOutcome o = testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
         return o;
@@ -489,10 +489,10 @@ public class MopedTest {
             {200, 3}
         };
         String[] expectedOrientations = {
-            "east",
-            "east",
-            "east",
-            "east"
+            "west",
+            "west",
+            "west",
+            "west"
         };
         TestOutcome o = testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
         return o;
@@ -508,10 +508,10 @@ public class MopedTest {
             {199, 2}
         };
         String[] expectedOrientations = {
-            "north",
-            "north",
-            "north",
-            "north"
+            "south",
+            "south",
+            "south",
+            "south"
         };
         TestOutcome o = testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
         return o;
@@ -527,10 +527,10 @@ public class MopedTest {
             {200, 2}
         };
         String[] expectedOrientations = {
-            "south",
-            "south",
-            "south",
-            "south"
+            "north",
+            "north",
+            "north",
+            "north"
         };
         TestOutcome o = testMovement(mockOrientation, mockMovements, mockLocations, expectedLocations, expectedOrientations);
         return o;
